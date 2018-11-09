@@ -1,10 +1,10 @@
 # Corso Death Match
 ###
-**Corso DM** – свобдный, некоммерческий проект, направленный на создание своей альтернативы DM режима.
+**Corso DM** – свобдный, некоммерческий проект, направленный на создание своей альтернативы DM режима.  
 ``Сервер находится в alhpa разработке.``
 
 ###
-**Corso DM** – a free, non-commercial project, aimed at creating own alternative of DM mode.
+**Corso DM** – a free, non-commercial project, aimed at creating own alternative of DM mode.  
 ``The server is in alhpa development.``
 
 ###
