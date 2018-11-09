@@ -2,20 +2,15 @@ DialogCreate:d_user_choose_language(playerid){
 	Dialog_Open(playerid, Dialog:d_user_choose_language, DIALOG_STYLE_MSGBOX, "CHOOSE_LANGUAGE"," ","RUSSIAN","ENGLISH");
 }
 DialogResponse:d_user_choose_language(playerid, response, listitem, inputtext[]){
-	if(!response){
-		SetPVarInt(playerid, "P:Language", 0);
+	if(!response)
 		Lang_SetPlayerLang(playerid, gLang[e_LANG_EN]);
-		P[playerid][p_language] = 0;
-		Dialog_Show(playerid, Dialog: d_player_settings);
-		if(P[playerid][_p_in_game] == false) Dialog_Show(playerid, Dialog:d_user_register);
-		return true;
-	}
-	SetPVarInt(playerid, "P:Language", 1);
-	Lang_SetPlayerLang(playerid, gLang[e_LANG_RU]);
-	P[playerid][p_language] = 1;
-	Dialog_Show(playerid, Dialog: d_player_settings);
-	if(P[playerid][_p_in_game] == false) Dialog_Show(playerid, Dialog:d_user_register);
-	return true;
+	else
+		Lang_SetPlayerLang(playerid, gLang[e_LANG_RU]);
+
+	SetPVarInt(playerid, "P:Language", response);
+	P[playerid][p_language] = response;
+	if(P[playerid][_p_in_game] == false) return Dialog_Show(playerid, Dialog:d_user_register);
+	else return Dialog_Show(playerid, Dialog: d_player_settings);
 }
 
 DialogCreate:d_user_register(playerid){
