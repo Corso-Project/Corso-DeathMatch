@@ -52,6 +52,8 @@ CMD:gunpack(playerid, params[]){
 CMD:exit(playerid, params[]){
 	if(P[playerid][_p_in_game] == false) return 1;
 	if(GetPVarInt(playerid, "DM:count_of_players") != 0){
+		HideZoneForPlayer(playerid, GetPVarInt(playerid, "DM:count_of_players")-1);
+		SetPVarInt(playerid, "DM:count_of_players", 0);
 		SetPlayerVirtualWorld(playerid, VirtualWorld_Normal);
 		Clear_PlayerWeaponData(playerid);
 		if(timer_time[playerid] != 0){
@@ -60,8 +62,6 @@ CMD:exit(playerid, params[]){
 	   		KillTimer(timer_time[playerid]);
 		}
 		SpawnPlayer(playerid);
-		HideZoneForPlayer(playerid, GetPVarInt(playerid, "DM:count_of_players")-1);
-		SetPVarInt(playerid, "DM:count_of_players", 0);
 	}
 	return true;
 }

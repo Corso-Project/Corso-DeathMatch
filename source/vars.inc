@@ -83,7 +83,7 @@ new gLang[e_LANG_INFO];
 new selected_weapons[MAX_PLAYERS][9],
 	count_of_selected_weapons[MAX_PLAYERS] = 0,
 	timer_count[MAX_PLAYERS] = 11,
-	timer_time[MAX_PLAYERS];
+	timer_time[MAX_PLAYERS] = 0;
 
 // Some values
 new code_check_tries[MAX_PLAYERS] = 0;

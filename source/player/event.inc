@@ -268,6 +268,7 @@ public OnPlayerEnterDynamicArea(playerid, areaid){
 			Lang_SendText(playerid, "DM_ENTER_AREA");
 			timer_count[playerid] = 11;
 			KillTimer(timer_time[playerid]);
+			timer_time[playerid] = 0;
 		}
 	}
 	return true;

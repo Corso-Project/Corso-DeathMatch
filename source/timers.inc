@@ -31,9 +31,12 @@ public Timer_Count_Leave_Area(playerid)
 	if(timer_count[playerid] <= 0){
 		format(string, sizeof(string),"~r~%i",timer_count[playerid]);
 		GameTextForPlayer(playerid, string, 1000, 3);
+
 		SetPlayerHealth(playerid, 0);
+
 		timer_count[playerid] = 11;
 		KillTimer(timer_time[playerid]);
+		timer_time[playerid] = 0;
 	}
     return 1;
 }
