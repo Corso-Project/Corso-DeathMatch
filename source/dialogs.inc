@@ -2,10 +2,8 @@ DialogCreate:d_user_choose_language(playerid){
 	Dialog_Open(playerid, Dialog:d_user_choose_language, DIALOG_STYLE_MSGBOX, "CHOOSE_LANGUAGE"," ","RUSSIAN","ENGLISH");
 }
 DialogResponse:d_user_choose_language(playerid, response, listitem, inputtext[]){
-	if(!response)
-		Lang_SetPlayerLang(playerid, gLang[e_LANG_EN]);
-	else
-		Lang_SetPlayerLang(playerid, gLang[e_LANG_RU]);
+	
+	Lang_SetPlayerLang(playerid, response ? gLang[e_LANG_RU] : gLang[e_LANG_EN]);
 
 	SetPVarInt(playerid, "P:Language", response);
 	P[playerid][p_language] = response;
