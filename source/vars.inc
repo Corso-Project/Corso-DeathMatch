@@ -28,7 +28,10 @@ enum E_PLAYER_DATA
 	p_shot_sound,
     p_language,
 	p_code[18],
-	p_code_ip[7]
+	p_code_ip[7],
+
+	// other
+	p_achievements[2]
 };
 enum E_GANG_ZONES_DATA
 {

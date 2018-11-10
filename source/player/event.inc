@@ -46,6 +46,8 @@ public OnPlayerConnect(playerid)
 	orm_addvar_string(ormid, P[playerid][p_code], 18, "Code");
 	orm_addvar_string(ormid, P[playerid][p_code_ip], 7, "IP_Code");
 
+	orm_addvar_string(ormid, P[playerid][p_achievements], 2, "Achievements");
+
 	orm_setkey(ormid, "Name");
 	orm_select(ormid, "OnMySQL_SelectAccount", "d", playerid);
 	foreach(new i : Player){
@@ -55,8 +57,6 @@ public OnPlayerConnect(playerid)
 			Lang_SendText(i, "MESSAGE_PLAYER_CONNECTED", P[playerid][p_name],playerid);
 		}
 	}
-	// GZ
-	//ShowZoneForPlayer(playerid, DeathMatch_GZone[0], 0xFF000050);
 	return 1;
 }
 public OnPlayerDisconnect(playerid, reason)
@@ -189,6 +189,13 @@ public OnPlayerDeath(playerid, killerid, reason)
 		}
 	}
 	P[playerid][p_deaths]++;
+	if (P[playerid][p_deaths] >= 100) {
+		new paradise;
+	    sscanf(P[playerid][p_achievements], "p<,>i", paradise);
+		paradise = 1;
+		format(P[playerid][p_achievements], 2, "%i,", paradise);
+		orm_update(P[playerid][_p_ormid]);
+	}
 	if(killerid != INVALID_PLAYER_ID)
 	{
 		P[killerid][p_kills]++;

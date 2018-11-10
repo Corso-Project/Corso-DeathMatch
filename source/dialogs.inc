@@ -26,7 +26,7 @@ DialogResponse:d_user_register(playerid, response, listitem, inputtext[]){
 	format(P[playerid][p_password], 18, inputtext);
 	GetPlayerIp(playerid, P[playerid][p_reg_ip], 46);
 	GetPlayerIp(playerid, P[playerid][p_last_ip], 46);
-	Cash_Give(killerid, g_Payment_First);
+	Cash_Give(playerid, g_Payment_First);
 	P[playerid][p_show_admin_action] = 1;
 	P[playerid][p_show_login] = 1;
 	P[playerid][p_show_players_nickname] = 1;
@@ -278,7 +278,6 @@ DialogResponse:d_player_menu(playerid, response, listitem, inputtext[]){
 		case 2: Dialog_Show(playerid, Dialog: d_player_security);
 		case 3: Dialog_Show(playerid, Dialog: d_player_ask);
 		case 4: Dialog_Show(playerid, Dialog: d_player_achievements);
-		case 5: Dialog_Show(playerid, Dialog: d_player_donate);
 	}
 	return true;
 }
@@ -386,15 +385,15 @@ DialogResponse:d_player_ask(playerid, response, listitem, inputtext[]){
 	return true;
 }
 DialogCreate:d_player_achievements(playerid){
-	SendClientMessage(playerid, -1, "Coming soon");
+	new paradise;
+    sscanf(P[playerid][p_achievements], "p<,>i", paradise);
+
+	Dialog_Open(playerid, Dialog:d_player_achievements, DIALOG_STYLE_TABLIST_HEADERS, "PERSONAL_DIALOG_MENU_ACH_HEADER", "PERSONAL_DIALOG_MENU_ACH", "ENTER", "EXIT",
+		paradise == 1 ? (Lang_ReturnOnlyText(playerid,"ACHIEVED")) : (Lang_ReturnOnlyText(playerid,"NO_ACHIEVED"))
+	);
 }
 DialogResponse:d_player_achievements(playerid, response, listitem, inputtext[]){
-	return true;
-}
-DialogCreate:d_player_donate(playerid){
-	SendClientMessage(playerid, -1, "Coming soon");
-}
-DialogResponse:d_player_donate(playerid, response, listitem, inputtext[]){
+
 	return true;
 }
 // Смена пароля
