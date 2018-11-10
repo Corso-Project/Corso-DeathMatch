@@ -2,7 +2,7 @@ DialogCreate:d_user_choose_language(playerid){
 	Dialog_Open(playerid, Dialog:d_user_choose_language, DIALOG_STYLE_MSGBOX, "CHOOSE_LANGUAGE"," ","RUSSIAN","ENGLISH");
 }
 DialogResponse:d_user_choose_language(playerid, response, listitem, inputtext[]){
-	
+
 	Lang_SetPlayerLang(playerid, response ? gLang[e_LANG_RU] : gLang[e_LANG_EN]);
 
 	SetPVarInt(playerid, "P:Language", response);
@@ -26,6 +26,7 @@ DialogResponse:d_user_register(playerid, response, listitem, inputtext[]){
 	format(P[playerid][p_password], 18, inputtext);
 	GetPlayerIp(playerid, P[playerid][p_reg_ip], 46);
 	GetPlayerIp(playerid, P[playerid][p_last_ip], 46);
+	Cash_Give(killerid, g_Payment_First);
 	P[playerid][p_show_admin_action] = 1;
 	P[playerid][p_show_login] = 1;
 	P[playerid][p_show_players_nickname] = 1;
@@ -67,8 +68,6 @@ DialogResponse:d_user_login(playerid, response, listitem, inputtext[]){
 	P[playerid][_p_in_game] = true;
 	TogglePlayerSpectating(playerid, 0);
 	Cash_Set(playerid, P[playerid][p_cash]);
-	//if(P[playerid][p_access] >= 1)
-	//	Protection_SetPlayerParamInt(playerid, PROTECTION_ALL, PROTECTION_PLAYER_DISABLED, 1);
 
 	Lang_SendText(playerid, "HELLO_LOGIN",SERVER_NAME);
 	SetPlayerScore(playerid, P[playerid][p_kills]);
@@ -291,7 +290,6 @@ DialogCreate:d_player_stats(playerid){
 
 	Dialog_Open(playerid, Dialog:d_player_stats, DIALOG_STYLE_MSGBOX," ","PERSONAL_DIALOG_STATS", "EXIT","",
 	P[playerid][p_name], P[playerid][p_kills], P[playerid][p_deaths], P[playerid][p_cash],
-	//P[playerid][p_kills] == 1 ? (Lang_ReturnOnlyText(playerid,"TEXT_ON")) : (Float:P[playerid][p_kills]/Float:P[playerid][p_deaths]));
 	P[playerid][p_kills] == 0 ? ("- 0") : (string));
 }
 DialogResponse:d_player_stats(playerid, response, listitem, inputtext[]){
@@ -569,6 +567,5 @@ DialogCreate:d_server_about(playerid){
 	Dialog_Open(playerid, Dialog:d_server_about, DIALOG_STYLE_MSGBOX, "ABOUT_VERSION_HEADER","ABOUT_VERSION","OK","",SERVER_NAME,GAMEMODE_VERSION);
 }
 DialogResponse:d_server_about(playerid, response, listitem, inputtext[]){
-
 	return true;
 }
