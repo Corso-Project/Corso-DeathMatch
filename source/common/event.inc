@@ -90,7 +90,7 @@ public OnRconCommand(cmd[])
 	if(!strcmp(cmd, "close", true)){
 		MapAndreas_Unload();
 		SendRconCommand("exit");
-		printf("test");
+		printf("[RCON] The server was closed by command - /close.");
 	}
     return 0;
 }

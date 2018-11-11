@@ -190,17 +190,28 @@ public OnPlayerDeath(playerid, killerid, reason)
 	}
 	P[playerid][p_deaths]++;
 	if (P[playerid][p_deaths] >= 100) {
-		new paradise;
-	    sscanf(P[playerid][p_achievements], "p<,>i", paradise);
+		new paradise,
+			collector;
+	    sscanf(P[playerid][p_achievements], "p<,>ii", paradise, collector);
 		paradise = 1;
-		format(P[playerid][p_achievements], 2, "%i,", paradise);
+		format(P[playerid][p_achievements], 16, "%i,%i", paradise, collector);
 		orm_update(P[playerid][_p_ormid]);
+		Lang_SendText(playerid, "MESSAGE_ACHIEVEMENT_UNLOCKED", Lang_ReturnOnlyText(playerid, "PARADISE"));
 	}
 	if(killerid != INVALID_PLAYER_ID)
 	{
 		P[killerid][p_kills]++;
 		SetPlayerScore(killerid, P[killerid][p_kills]);
 		Cash_Give(killerid, g_Payment_Killing);
+		if (P[playerid][p_kills] == 25){
+			new paradise,
+				collector;
+		    sscanf(P[playerid][p_achievements], "p<,>ii", paradise, collector);
+			format(P[playerid][p_achievements], 16, "%i,%i", paradise, collector);
+			orm_update(P[playerid][_p_ormid]);
+			Lang_SendText(playerid, "MESSAGE_ACHIEVEMENT_UNLOCKED", Lang_ReturnOnlyText(playerid, "COLLECTOR"));
+
+		}
 	}
 	SendDeathMessage(killerid, playerid, reason);
 	return 1;

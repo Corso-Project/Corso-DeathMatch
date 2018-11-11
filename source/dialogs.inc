@@ -385,11 +385,13 @@ DialogResponse:d_player_ask(playerid, response, listitem, inputtext[]){
 	return true;
 }
 DialogCreate:d_player_achievements(playerid){
-	new paradise;
-    sscanf(P[playerid][p_achievements], "p<,>i", paradise);
+	new paradise,
+		collector;
+    sscanf(P[playerid][p_achievements], "p<,>ii", paradise, collector);
 
 	Dialog_Open(playerid, Dialog:d_player_achievements, DIALOG_STYLE_TABLIST_HEADERS, "PERSONAL_DIALOG_MENU_ACH_HEADER", "PERSONAL_DIALOG_MENU_ACH", "ENTER", "EXIT",
-		paradise == 1 ? (Lang_ReturnOnlyText(playerid,"ACHIEVED")) : (Lang_ReturnOnlyText(playerid,"NO_ACHIEVED"))
+		paradise == 1 ? (Lang_ReturnOnlyText(playerid,"ACHIEVED")) : (Lang_ReturnOnlyText(playerid,"NO_ACHIEVED")),
+		collector == 1 ? (Lang_ReturnOnlyText(playerid,"ACHIEVED")) : (Lang_ReturnOnlyText(playerid,"NO_ACHIEVED"))
 	);
 }
 DialogResponse:d_player_achievements(playerid, response, listitem, inputtext[]){

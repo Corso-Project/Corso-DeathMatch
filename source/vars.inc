@@ -31,7 +31,7 @@ enum E_PLAYER_DATA
 	p_code_ip[7],
 
 	// other
-	p_achievements[2]
+	p_achievements[16]
 };
 enum E_GANG_ZONES_DATA
 {
