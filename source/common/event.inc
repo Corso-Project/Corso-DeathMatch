@@ -87,6 +87,11 @@ public OnRconCommand(cmd[])
 		printf("[RCON] Was kicked %i player(s).", count);
         return 1;
     }
+	if(!strcmp(cmd, "close", true)){
+		MapAndreas_Unload();
+		SendRconCommand("exit");
+		printf("test");
+	}
     return 0;
 }
 public OnRconLoginAttempt(ip[], password[], success)
