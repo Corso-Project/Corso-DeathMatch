@@ -11,7 +11,7 @@ stock Cash_Give(playerid, amount)
 	P[playerid][p_cash] += amount;
 }
 
-stock TeleportPlayerToPos(playerid, Float:x, Float:y, Float:z, interiorid, worldid){
+stock TeleportPlayerToPos(playerid, Float:x, Float:y, Float:z, interiorid = 0, worldid = 0){
 	SetPlayerPos(playerid, x, y, z);
 	SetPlayerInterior(playerid, interiorid);
 	SetPlayerVirtualWorld(playerid, worldid);

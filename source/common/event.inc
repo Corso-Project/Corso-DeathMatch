@@ -74,6 +74,21 @@ public OnGameModeExit()
 	mysql_close();
 	return 1;
 }
+public OnRconCommand(cmd[])
+{
+    if(!strcmp(cmd, "kickall", true))
+    {
+		new count = 0;
+		foreach(new i : Player) {
+			SendClientMessage(i, -1, "Force kick.");
+		    Kick(i);
+			count += 1;
+		}
+		printf("[RCON] Was kicked %i player(s).", count);
+        return 1;
+    }
+    return 0;
+}
 public OnRconLoginAttempt(ip[], password[], success)
 {
     if(!success) //If the password was incorrect
