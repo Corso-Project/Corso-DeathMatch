@@ -178,9 +178,16 @@ CMD:slap(playerid, params[])
 	GetPlayerPos(user, slx, sly, slz);
 	SetPlayerPos(user, slx, sly, slz+5);
 	PlayerPlaySound(user, 1130, slx, sly, slz+5);
-	//Message_ToAdmins(0xAFAFAFFF, "[A] %s[%d] подкинул игрока %s[%d].",P[playerid][p_name],playerid,P[user][p_name],user);
-	//Message_ToAdmins("[A] %s[%d] подкинул игрока %s[%d].",P[playerid][p_name],playerid,P[user][p_name],user);
 	Message_ToAdmin("MESSAGE_ADMIN_SLAP",P[playerid][p_name],playerid,P[user][p_name],user);
+	return true;
+}
+CMD:setkills(playerid, params[]){
+	if(P[playerid][_p_in_game] == false) return 1;
+	if(P[playerid][p_access] < 1) return true;
+	new user, count;
+	if(sscanf(params,"ui", user, count)) return SendClientMessage(playerid, -1, "Use /setkills [ID] [Count of Kills]");
+	P[user][p_kills] = count;
+	orm_update(P[user][_p_ormid]);
 	return true;
 }
 CMD:reload(playerid, params[]){

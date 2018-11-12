@@ -72,6 +72,9 @@ DialogResponse:d_user_login(playerid, response, listitem, inputtext[]){
 	Lang_SendText(playerid, "HELLO_LOGIN",SERVER_NAME);
 	SetPlayerScore(playerid, P[playerid][p_kills]);
 
+	// if(P[playerid][p_access] >= 1)
+	Protection_SetPlayerParamInt(playerid, PROTECTION_ALL, PROTECTION_PLAYER_DISABLED, 1);
+
 	GetPlayerIp(playerid, P[playerid][p_last_ip], 46);
 	orm_update(P[playerid][_p_ormid]);
 	return true;
@@ -488,8 +491,6 @@ DialogResponse:check_security_code(playerid, response, listitem, inputtext[]){
 	P[playerid][_p_in_game] = true;
 	TogglePlayerSpectating(playerid, 0);
 	Cash_Set(playerid, P[playerid][p_cash]);
-	if(P[playerid][p_access] >= 1)
-		Protection_SetPlayerParamInt(playerid, PROTECTION_ALL, PROTECTION_PLAYER_DISABLED, 1);
 
 	Lang_SendText(playerid, "HELLO_LOGIN",SERVER_NAME);
 	SetPlayerScore(playerid, P[playerid][p_kills]);
@@ -553,8 +554,6 @@ DialogResponse:check_security_code_ip(playerid, response, listitem, inputtext[])
 	P[playerid][_p_in_game] = true;
 	TogglePlayerSpectating(playerid, 0);
 	Cash_Set(playerid, P[playerid][p_cash]);
-	if(P[playerid][p_access] >= 1)
-		Protection_SetPlayerParamInt(playerid, PROTECTION_ALL, PROTECTION_PLAYER_DISABLED, 1);
 
 	Lang_SendText(playerid, "HELLO_LOGIN",SERVER_NAME);
 	SetPlayerScore(playerid, P[playerid][p_kills]);

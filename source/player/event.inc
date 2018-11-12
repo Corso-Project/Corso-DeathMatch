@@ -203,13 +203,13 @@ public OnPlayerDeath(playerid, killerid, reason)
 		P[killerid][p_kills]++;
 		SetPlayerScore(killerid, P[killerid][p_kills]);
 		Cash_Give(killerid, g_Payment_Killing);
-		if (P[playerid][p_kills] == 25){
+		if (P[killerid][p_kills] == 25){
 			new paradise,
 				collector;
-		    sscanf(P[playerid][p_achievements], "p<,>ii", paradise, collector);
-			format(P[playerid][p_achievements], 16, "%i,%i", paradise, collector);
-			orm_update(P[playerid][_p_ormid]);
-			Lang_SendText(playerid, "MESSAGE_ACHIEVEMENT_UNLOCKED", Lang_ReturnOnlyText(playerid, "COLLECTOR"));
+		    sscanf(P[killerid][p_achievements], "p<,>ii", paradise, collector);
+			format(P[killerid][p_achievements], 16, "%i,%i", paradise, collector);
+			orm_update(P[killerid][_p_ormid]);
+			Lang_SendText(killerid, "MESSAGE_ACHIEVEMENT_UNLOCKED", Lang_ReturnOnlyText(killerid, "COLLECTOR"));
 
 		}
 	}
@@ -233,8 +233,14 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 }
 public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 {
-	if(P[playerid][p_shot_sound] == 1 && issuerid != INVALID_PLAYER_ID)
-		PlayerPlaySound(playerid, 6401, 0,0,0);
+	if (issuerid != INVALID_PLAYER_ID) {
+		if (P[playerid][p_shot_sound] == 1)
+			PlayerPlaySound(issuerid, 6401, 0,0,0);
+		if (bodypart == 9) {
+			SetPlayerHealth(playerid, 0.0);
+			SendClientMessage(issuerid, -1, "H-E-A-D-S-H-O-T!");
+		}
+	}
 	return true;
 }
 public OnPlayerClickMap(playerid, Float: fX, Float: fY, Float: fZ)
