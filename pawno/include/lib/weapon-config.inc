@@ -847,6 +847,9 @@ static s_VehicleUnoccupiedDamage = false;
 static Float:s_FallDeathVelocity = -0.6;
 static s_DamageTakenSound = 1190;
 static s_DamageGivenSound = 17802;
+// Corso
+static s_DamageTakenSound_toggle = false;
+static s_DamageGivenSound_toggle = false;
 static s_RejectedHits[MAX_PLAYERS][WC_MAX_REJECTED_HITS][E_REJECTED_HIT];
 static s_RejectedHitsIdx[MAX_PLAYERS];
 static s_World[MAX_PLAYERS];
@@ -1097,6 +1100,13 @@ stock SetWeaponArmourRule(weaponid, bool:affects_armour, bool:torso_only = false
 
 	return 1;
 }
+
+// Corso
+stock ToggleDamageSounds(taken = false, given = false){
+	s_DamageTakenSound_toggle = taken;
+	s_DamageGivenSound_toggle = given;
+}
+
 
 stock SetDamageSounds(taken, given)
 {
@@ -5410,7 +5420,7 @@ public OnPlayerDamageDone(playerid, Float:amount, issuerid, weapon, bodypart)
 	if (!IsHighRateWeapon(weapon)) {
 		DebugMessageAll("OnPlayerDamageDone(%d did %f to %d with %d on bodypart %d)", issuerid, amount, playerid, weapon, bodypart);
 
-		if (s_DamageTakenSound) {
+		if (s_DamageTakenSound && s_DamageTakenSound_toggle) {
 			PlayerPlaySound(playerid, s_DamageTakenSound, 0.0, 0.0, 0.0);
 
 			for (new i = 0; i < MAX_PLAYERS; i++) {
@@ -5420,7 +5430,7 @@ public OnPlayerDamageDone(playerid, Float:amount, issuerid, weapon, bodypart)
 			}
 		}
 
-		if (s_DamageGivenSound && issuerid != INVALID_PLAYER_ID) {
+		if (s_DamageGivenSound && issuerid != INVALID_PLAYER_ID && s_DamageGivenSound_toggle) {
 			PlayerPlaySound(issuerid, s_DamageGivenSound, 0.0, 0.0, 0.0);
 
 			for (new i = 0; i < MAX_PLAYERS; i++) {

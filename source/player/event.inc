@@ -21,6 +21,17 @@ public OnPlayerConnect(playerid)
     PlayerTextDrawFont(playerid, Map_Stats[playerid], 1);
     PlayerTextDrawSetProportional(playerid, Map_Stats[playerid], 1);
 
+	Spree[playerid] = CreatePlayerTextDraw(playerid, 320.399749, 92.933311, "_");
+	PlayerTextDrawLetterSize(playerid, Spree[playerid], 0.400000, 1.600000);
+	PlayerTextDrawAlignment(playerid, Spree[playerid], 2);
+	PlayerTextDrawColor(playerid, Spree[playerid], -1);
+	PlayerTextDrawSetShadow(playerid, Spree[playerid], 1);
+	PlayerTextDrawSetOutline(playerid, Spree[playerid], 0);
+	PlayerTextDrawBackgroundColor(playerid, Spree[playerid], 100);
+	PlayerTextDrawFont(playerid, Spree[playerid], 1);
+	PlayerTextDrawSetProportional(playerid, Spree[playerid], 1);
+	PlayerTextDrawSetShadow(playerid, Spree[playerid], 1);
+
     TogglePlayerSpectating(playerid, 1);
 	GetPlayerName(playerid, P[playerid][p_name], MAX_PLAYER_NAME);
 	GetPlayerIp(playerid, P[playerid][p_last_ip], 46);
@@ -104,10 +115,10 @@ public OnPlayerDisconnect(playerid, reason)
 
 public OnPlayerSpawn(playerid)
 {
-	//PlayerTextDrawShow(playerid, Map_Stats[playerid]);
+	// PlayerTextDrawShow(playerid, Map_Stats[playerid]);
 	new scriptString2[169];
 	format(scriptString2,sizeof(scriptString2),"~w~~h~K: ~r~~h~%d~n~~w~~h~D: ~r~~h~%d~n~~w~~h~Ratio: ~r~~h~%0.2f", P[playerid][p_kills], P[playerid][p_deaths], Float:P[playerid][p_kills]/Float:P[playerid][p_deaths]);
-	PlayerTextDrawSetString(playerid, Map_Stats[playerid],scriptString2);
+	PlayerTextDrawSetString(playerid, Map_Stats[playerid], scriptString2);
 
 	SetPlayerInterior(playerid, 0);
 	if(GetPVarInt(playerid, "DM:count_of_players") != 0){
@@ -189,7 +200,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 		}
 	}
 	P[playerid][p_deaths]++;
-	if (P[playerid][p_deaths] >= 100) {
+	if (P[playerid][p_deaths] == 100) {
 		new paradise,
 			collector;
 	    sscanf(P[playerid][p_achievements], "p<,>ii", paradise, collector);
@@ -203,6 +214,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 		P[killerid][p_kills]++;
 		SetPlayerScore(killerid, P[killerid][p_kills]);
 		Cash_Give(killerid, g_Payment_Killing);
+
 		if (P[killerid][p_kills] == 25){
 			new paradise,
 				collector;
@@ -210,7 +222,45 @@ public OnPlayerDeath(playerid, killerid, reason)
 			format(P[killerid][p_achievements], 16, "%i,%i", paradise, collector);
 			orm_update(P[killerid][_p_ormid]);
 			Lang_SendText(killerid, "MESSAGE_ACHIEVEMENT_UNLOCKED", Lang_ReturnOnlyText(killerid, "COLLECTOR"));
-
+		}
+		SetPVarInt(playerid, "Spree", 0);
+		SetPVarInt(killerid, "Spree", GetPVarInt(killerid, "Spree") + 1);
+		switch(GetPVarInt(killerid, "Spree")){
+			case 2: {
+				new string[18+1];
+				format(string, sizeof(string), "~w~~h~Double kill!");
+				PlayerTextDrawSetString(killerid, Spree[killerid], string);
+				PlayerTextDrawShow(killerid, Spree[killerid]);
+				SetTimerEx("DeleteTD", 3300, false, "i", playerid);
+			}
+			case 3: {
+				new string[18+1];
+				format(string, sizeof(string), "~y~~h~Tripe kill!");
+				PlayerTextDrawSetString(killerid, Spree[killerid], string);
+				PlayerTextDrawShow(killerid, Spree[killerid]);
+				SetTimerEx("DeleteTD", 3300, false, "i", playerid);
+			}
+			case 4: {
+				new string[18+1];
+				format(string, sizeof(string), "~g~~h~Ultra kill!");
+				PlayerTextDrawSetString(killerid, Spree[killerid], string);
+				PlayerTextDrawShow(killerid, Spree[killerid]);
+				SetTimerEx("DeleteTD", 3300, false, "i", playerid);
+			}
+			case 5: {
+				new string[18+1];
+				format(string, sizeof(string), "~r~~h~Rampage kill!");
+				PlayerTextDrawSetString(killerid, Spree[killerid], string);
+				PlayerTextDrawShow(killerid, Spree[killerid]);
+				SetTimerEx("DeleteTD", 3300, false, "i", playerid);
+			}
+			case 10: {
+				new string[18+1];
+				format(string, sizeof(string), "~p~~h~Beast!");
+				PlayerTextDrawSetString(killerid, Spree[killerid], string);
+				PlayerTextDrawShow(killerid, Spree[killerid]);
+				SetTimerEx("DeleteTD", 3300, false, "i", playerid);
+			}
 		}
 	}
 	SendDeathMessage(killerid, playerid, reason);
@@ -234,8 +284,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 {
 	if (issuerid != INVALID_PLAYER_ID) {
-		if (P[playerid][p_shot_sound] == 1)
-			PlayerPlaySound(issuerid, 6401, 0,0,0);
 		if (bodypart == 9) {
 			SetPlayerHealth(playerid, 0.0);
 			SendClientMessage(issuerid, -1, "H-E-A-D-S-H-O-T!");

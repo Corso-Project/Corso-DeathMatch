@@ -75,9 +75,11 @@ CMD:menu(playerid,params[]){
 	Dialog_Show(playerid, Dialog:d_player_menu);
 }
 alias:menu("mn","mm");
+
 CMD:test(playerid, params[]){
 	return true;
 }
+
 CMD:about(playerid, params[]){
 	Dialog_Show(playerid, Dialog:d_server_about);
 	return true;

@@ -75,6 +75,9 @@ DialogResponse:d_user_login(playerid, response, listitem, inputtext[]){
 	// if(P[playerid][p_access] >= 1)
 	Protection_SetPlayerParamInt(playerid, PROTECTION_ALL, PROTECTION_PLAYER_DISABLED, 1);
 
+	if (P[playerid][p_shot_sound] == 1)
+		ToggleDamageSounds(true, true); // Taken, Given
+
 	GetPlayerIp(playerid, P[playerid][p_last_ip], 46);
 	orm_update(P[playerid][_p_ormid]);
 	return true;
@@ -345,10 +348,14 @@ DialogResponse:d_player_settings(playerid, response, listitem, inputtext[]){
 			Dialog_Show(playerid, Dialog: d_player_settings);
 		}
 		case 3:{
-			if(P[playerid][p_shot_sound] == 0)
+			if(P[playerid][p_shot_sound] == 0) {
+				ToggleDamageSounds(true, true); // Taken, Given
 				P[playerid][p_shot_sound] = 1;
-			else if(P[playerid][p_shot_sound] == 1)
+			}
+			else if(P[playerid][p_shot_sound] == 1) {
+				ToggleDamageSounds(false, false); // Taken, Given
 				P[playerid][p_shot_sound] = 0;
+			}
 
 			Dialog_Show(playerid, Dialog: d_player_settings);
 		}

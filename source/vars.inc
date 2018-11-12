@@ -62,7 +62,8 @@ new WeaponData[MAX_PLAYERS][13][2],
 // TD
 new Text:Corso;
 	// Player
-new PlayerText:Map_Stats[MAX_PLAYERS];
+new PlayerText: Map_Stats[MAX_PLAYERS];
+new PlayerText: Spree[MAX_PLAYERS];
 // GangZone
 new DeathMatch_GZone[sizeof(GZ)],
 	DeathMatch_Recta[sizeof(DeathMatch_GZone)];

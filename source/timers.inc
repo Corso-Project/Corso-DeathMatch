@@ -40,3 +40,9 @@ public Timer_Count_Leave_Area(playerid)
 	}
     return 1;
 }
+
+forward DeleteTD(playerid);
+public DeleteTD(playerid)
+{
+	PlayerTextDrawHide(playerid, Spree[playerid]);
+}
