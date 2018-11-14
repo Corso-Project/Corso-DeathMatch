@@ -27,10 +27,19 @@ DialogResponse:d_user_register(playerid, response, listitem, inputtext[]){
 	GetPlayerIp(playerid, P[playerid][p_reg_ip], 46);
 	GetPlayerIp(playerid, P[playerid][p_last_ip], 46);
 	Cash_Give(playerid, g_Payment_First);
+
+	sscanf(P[playerid][p_settings], "p<,>iiii", P[playerid][p_show_admin_action], P[playerid][p_show_login], P[playerid][p_show_players_nickname], P[playerid][p_shot_sound]);
 	P[playerid][p_show_admin_action] = 1;
-	P[playerid][p_show_login] = 1;
+	P[playerid][p_show_login] = 0;
 	P[playerid][p_show_players_nickname] = 1;
-	P[playerid][p_shot_sound] = 1;
+	P[playerid][p_shot_sound] = 0;
+	format(P[playerid][p_settings], 10, "%i,%i,%i,%i", P[playerid][p_show_admin_action], P[playerid][p_show_login], P[playerid][p_show_players_nickname], P[playerid][p_shot_sound]);
+
+	sscanf(P[playerid][p_achievements], "p<,>ii", P[playerid][p_paradise], P[playerid][p_collector]);
+	P[playerid][p_paradise] = 0;
+	P[playerid][p_collector] = 0;
+	format(P[playerid][p_achievements], 16, "%i,%i", P[playerid][p_paradise], P[playerid][p_collector]);
+
 	P[playerid][p_language] = GetPVarInt(playerid, "P:Language");
 	orm_insert(P[playerid][_p_ormid], "OnMySQL_InsertAccount", "d", playerid);
 	return true;
@@ -53,6 +62,9 @@ DialogResponse:d_user_login(playerid, response, listitem, inputtext[]){
 		return Dialog_Show(playerid, Dialog: check_security_code);
 	else if(strlen(P[playerid][p_code_ip]) != 0 && strcmp(P[playerid][p_reg_ip], P[playerid][p_last_ip], false) != 0)
 		return Dialog_Show(playerid, Dialog: check_security_code_ip);
+
+	sscanf(P[playerid][p_settings], "p<,>iiii", P[playerid][p_show_admin_action], P[playerid][p_show_login], P[playerid][p_show_players_nickname], P[playerid][p_shot_sound]);
+	sscanf(P[playerid][p_achievements], "p<,>ii", P[playerid][p_paradise], P[playerid][p_collector]);
 
 	// Настройки
 	if(P[playerid][p_show_players_nickname] == 0){
@@ -323,6 +335,7 @@ DialogResponse:d_player_settings(playerid, response, listitem, inputtext[]){
 				P[playerid][p_show_admin_action] = 0;
 
 			Dialog_Show(playerid, Dialog: d_player_settings);
+			Update_PlayerSettings(playerid);
 		}
 		case 1:{
 			if(P[playerid][p_show_login] == 0)
@@ -331,6 +344,7 @@ DialogResponse:d_player_settings(playerid, response, listitem, inputtext[]){
 				P[playerid][p_show_login] = 0;
 
 			Dialog_Show(playerid, Dialog: d_player_settings);
+			Update_PlayerSettings(playerid);
 		}
 		case 2:{
 			if(P[playerid][p_show_players_nickname] == 0){
@@ -346,6 +360,7 @@ DialogResponse:d_player_settings(playerid, response, listitem, inputtext[]){
 				P[playerid][p_show_players_nickname] = 0;
 			}
 			Dialog_Show(playerid, Dialog: d_player_settings);
+			Update_PlayerSettings(playerid);
 		}
 		case 3:{
 			if(P[playerid][p_shot_sound] == 0) {
@@ -356,8 +371,8 @@ DialogResponse:d_player_settings(playerid, response, listitem, inputtext[]){
 				ToggleDamageSounds(false, false); // Taken, Given
 				P[playerid][p_shot_sound] = 0;
 			}
-
 			Dialog_Show(playerid, Dialog: d_player_settings);
+			Update_PlayerSettings(playerid);
 		}
 		case 4: Dialog_Show(playerid, Dialog: d_user_choose_language);
 	}
@@ -395,13 +410,9 @@ DialogResponse:d_player_ask(playerid, response, listitem, inputtext[]){
 	return true;
 }
 DialogCreate:d_player_achievements(playerid){
-	new paradise,
-		collector;
-    sscanf(P[playerid][p_achievements], "p<,>ii", paradise, collector);
-
 	Dialog_Open(playerid, Dialog:d_player_achievements, DIALOG_STYLE_TABLIST_HEADERS, "PERSONAL_DIALOG_MENU_ACH_HEADER", "PERSONAL_DIALOG_MENU_ACH", "ENTER", "EXIT",
-		paradise == 1 ? (Lang_ReturnOnlyText(playerid,"ACHIEVED")) : (Lang_ReturnOnlyText(playerid,"NO_ACHIEVED")),
-		collector == 1 ? (Lang_ReturnOnlyText(playerid,"ACHIEVED")) : (Lang_ReturnOnlyText(playerid,"NO_ACHIEVED"))
+		P[playerid][p_paradise] == 1 ? (Lang_ReturnOnlyText(playerid,"ACHIEVED")) : (Lang_ReturnOnlyText(playerid,"NO_ACHIEVED")),
+		P[playerid][p_collector] == 1 ? (Lang_ReturnOnlyText(playerid,"ACHIEVED")) : (Lang_ReturnOnlyText(playerid,"NO_ACHIEVED"))
 	);
 }
 DialogResponse:d_player_achievements(playerid, response, listitem, inputtext[]){

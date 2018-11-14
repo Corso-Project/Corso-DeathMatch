@@ -22,6 +22,7 @@ enum E_PLAYER_DATA
 	p_last_ip[46],
 
 	//settings
+	p_settings[10],
 	p_show_admin_action,
 	p_show_login,
 	p_show_players_nickname,
@@ -31,7 +32,11 @@ enum E_PLAYER_DATA
 	p_code_ip[7],
 
 	// other
-	p_achievements[16]
+	p_achievements[16],
+
+	// Achievements
+	p_paradise,
+	p_collector
 };
 enum E_GANG_ZONES_DATA
 {

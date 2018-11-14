@@ -97,14 +97,19 @@ CMD:irc(playerid, params[]){
 	}
 
 	new chat_message[64];
-	if(sscanf(subparams, "s[64]", chat_message)) return SendClientMessage(playerid, 0xB22222FF,"[Справка]: {FFFFFF}/irc [text]");
+	format(chat_message, sizeof(chat_message), "subcmd: %s | subparams: %s", subcmd, subparams);
 	SendClientMessage(playerid, -1, chat_message);
 
 	printf("%s | %s", subcmd, subparams);
-	if(strcmp(subcmd, "join", true) == 0){
+	if (strcmp(subcmd, "join", true) == 0){
 		new room;
 		if(sscanf(subparams, "i", room)) return SendClientMessage(playerid, -1, "[Справка]: {FFFFFF}Используйте /irc join [0 - 999999]");
 		SetPVarInt(playerid, "IRC:room", room);
+	}
+	else if (strcmp(subcmd, "text", true) == 0){
+		new string[124];
+		if (sscanf(subparams, "s[124]", string)) return SendClientMessage(playerid, -1, "[Справка]: {FFFFFF}Используйте /irc text [Text]");
+		SendClientMessage(playerid, -1, string);
 	}
 	return true;
 }

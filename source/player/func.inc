@@ -46,3 +46,11 @@ stock Get_PlayerVIP(playerid){
 	}
 	return vip;
 }
+stock Update_PlayerSettings(playerid) {
+	format(P[playerid][p_settings], 10, "%i,%i,%i,%i", P[playerid][p_show_admin_action], P[playerid][p_show_login], P[playerid][p_show_players_nickname], P[playerid][p_shot_sound]);
+	orm_update(P[playerid][_p_ormid]);
+}
+stock Update_Achievements(playerid) {
+	format(P[playerid][p_achievements], 10, "%i,%i", P[playerid][p_paradise], P[playerid][p_collector]);
+	orm_update(P[playerid][_p_ormid]);
+}

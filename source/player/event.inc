@@ -49,15 +49,12 @@ public OnPlayerConnect(playerid)
 	orm_addvar_string(ormid, P[playerid][p_last_ip], 46, "Last_IP");
 	orm_addvar_int(ormid, P[playerid][p_vip], "VIP");
 
-	orm_addvar_int(ormid, P[playerid][p_show_admin_action], "Show_Admin_Action");
-	orm_addvar_int(ormid, P[playerid][p_show_login], "Show_Login");
-	orm_addvar_int(ormid, P[playerid][p_show_players_nickname], "Show_Players_Nickname");
-	orm_addvar_int(ormid, P[playerid][p_shot_sound], "Shot_Sound");
+	orm_addvar_string(ormid, P[playerid][p_settings], 10, "Settings");
 	orm_addvar_int(ormid, P[playerid][p_language], "Language");
 	orm_addvar_string(ormid, P[playerid][p_code], 18, "Code");
 	orm_addvar_string(ormid, P[playerid][p_code_ip], 7, "IP_Code");
 
-	orm_addvar_string(ormid, P[playerid][p_achievements], 2, "Achievements");
+	orm_addvar_string(ormid, P[playerid][p_achievements], 16, "Achievements");
 
 	orm_setkey(ormid, "Name");
 	orm_select(ormid, "OnMySQL_SelectAccount", "d", playerid);
@@ -104,9 +101,9 @@ public OnPlayerDisconnect(playerid, reason)
 	}
 
 	switch(reason){
-		case 0: Lang_printf("MESSAGE_PLAYER_DISCONNECT_CRASH", P[playerid][p_name],playerid);
-		case 1: Lang_printf("MESSAGE_PLAYER_DISCONNECT_QUIT", P[playerid][p_name],playerid);
-		case 2: Lang_printf("MESSAGE_PLAYER_DISCONNECT_KICK", P[playerid][p_name],playerid);
+		case 0: Lang_printf("MESSAGE_PLAYER_DISCONNECT_CRASH", P[playerid][p_name], playerid);
+		case 1: Lang_printf("MESSAGE_PLAYER_DISCONNECT_QUIT", P[playerid][p_name], playerid);
+		case 2: Lang_printf("MESSAGE_PLAYER_DISCONNECT_KICK", P[playerid][p_name], playerid);
 	}
 
 	for(new i; i < sizeof(P[]); i++) P[playerid][E_PLAYER_DATA: i] = 0;
@@ -201,12 +198,8 @@ public OnPlayerDeath(playerid, killerid, reason)
 	}
 	P[playerid][p_deaths]++;
 	if (P[playerid][p_deaths] == 100) {
-		new paradise,
-			collector;
-	    sscanf(P[playerid][p_achievements], "p<,>ii", paradise, collector);
-		paradise = 1;
-		format(P[playerid][p_achievements], 16, "%i,%i", paradise, collector);
-		orm_update(P[playerid][_p_ormid]);
+		P[playerid][p_paradise] = 1;
+		Update_Achievements(playerid);
 		Lang_SendText(playerid, "MESSAGE_ACHIEVEMENT_UNLOCKED", Lang_ReturnOnlyText(playerid, "PARADISE"));
 	}
 	if(killerid != INVALID_PLAYER_ID)
@@ -216,11 +209,8 @@ public OnPlayerDeath(playerid, killerid, reason)
 		Cash_Give(killerid, g_Payment_Killing);
 
 		if (P[killerid][p_kills] == 25){
-			new paradise,
-				collector;
-		    sscanf(P[killerid][p_achievements], "p<,>ii", paradise, collector);
-			format(P[killerid][p_achievements], 16, "%i,%i", paradise, collector);
-			orm_update(P[killerid][_p_ormid]);
+			P[playerid][p_collector] = 1;
+			Update_Achievements(playerid);
 			Lang_SendText(killerid, "MESSAGE_ACHIEVEMENT_UNLOCKED", Lang_ReturnOnlyText(killerid, "COLLECTOR"));
 		}
 		SetPVarInt(playerid, "Spree", 0);
