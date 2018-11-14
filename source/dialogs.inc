@@ -416,7 +416,13 @@ DialogCreate:d_player_achievements(playerid){
 	);
 }
 DialogResponse:d_player_achievements(playerid, response, listitem, inputtext[]){
-
+	if(!response)
+		return Dialog_Show(playerid, Dialog: d_player_menu);
+	if(response) switch (listitem){
+		case 0: Lang_SendText(playerid, "PARADISE_INFO");
+		case 1: Lang_SendText(playerid, "COLLECTOR_INFO");
+	}
+	Dialog_Show(playerid, Dialog: d_player_achievements);
 	return true;
 }
 // Смена пароля
