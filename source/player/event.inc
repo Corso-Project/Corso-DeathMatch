@@ -72,38 +72,41 @@ public OnPlayerDisconnect(playerid, reason)
 	if(P[playerid][_p_ormid]) {
 	    if(P[playerid][_p_in_game] == true) {
 			orm_update(P[playerid][_p_ormid]);
-	    }
 
-		for(new i;i<13;i++){
-			WeaponData[playerid][i][0] = 0;
-			WeaponData[playerid][i][1] = 0;
-			WeaponDrop[playerid][i] = 0;
-		}
-
-		for(new i=0;i<9;i++)
-			selected_weapons[playerid][i] = 0;
-		count_of_selected_weapons[playerid] = 0;
-
-		timer_count[playerid] = 0;
-		timer_time[playerid] = 0;
-	    orm_destroy(P[playerid][_p_ormid]);
-	}
-	foreach(new i : Player){
-		if(P[i][_p_in_game] == false) return true;
-		if(i == playerid) continue;
-		if(P[i][p_show_login] == 1){
-			switch(reason){
-				case 0: Lang_SendText(i, "MESSAGE_PLAYER_DISCONNECT_CRASH",P[playerid][p_name], playerid);
-				case 1: Lang_SendText(i, "MESSAGE_PLAYER_DISCONNECT_QUIT",P[playerid][p_name], playerid);
-				case 2: Lang_SendText(i, "MESSAGE_PLAYER_DISCONNECT_KICK",P[playerid][p_name], playerid);
+			for(new i;i<13;i++){
+				WeaponData[playerid][i][0] = 0;
+				WeaponData[playerid][i][1] = 0;
+				WeaponDrop[playerid][i] = 0;
 			}
-		}
-	}
 
-	switch(reason){
-		case 0: Lang_printf("MESSAGE_PLAYER_DISCONNECT_CRASH", P[playerid][p_name], playerid);
-		case 1: Lang_printf("MESSAGE_PLAYER_DISCONNECT_QUIT", P[playerid][p_name], playerid);
-		case 2: Lang_printf("MESSAGE_PLAYER_DISCONNECT_KICK", P[playerid][p_name], playerid);
+			for(new i=0;i<9;i++)
+				selected_weapons[playerid][i] = 0;
+			count_of_selected_weapons[playerid] = 0;
+
+			timer_count[playerid] = 0;
+			timer_time[playerid] = 0;
+
+			foreach(new i : Player){
+				if(i == playerid) continue;
+				if(P[i][p_show_login] == 1){
+					switch(reason){
+						case 0: {
+							Lang_SendText(i, "MESSAGE_PLAYER_DISCONNECT_CRASH",P[playerid][p_name], playerid);
+							Lang_printf("MESSAGE_PLAYER_DISCONNECT_CRASH", P[playerid][p_name], playerid);
+						}
+						case 1: {
+							Lang_SendText(i, "MESSAGE_PLAYER_DISCONNECT_QUIT",P[playerid][p_name], playerid);
+							Lang_printf("MESSAGE_PLAYER_DISCONNECT_QUIT", P[playerid][p_name], playerid);
+						}
+						case 2: {
+							Lang_SendText(i, "MESSAGE_PLAYER_DISCONNECT_KICK",P[playerid][p_name], playerid);
+							Lang_printf("MESSAGE_PLAYER_DISCONNECT_KICK", P[playerid][p_name], playerid);
+						}
+					}
+				}
+			}
+		    orm_destroy(P[playerid][_p_ormid]);
+	    }
 	}
 
 	for(new i; i < sizeof(P[]); i++) P[playerid][E_PLAYER_DATA: i] = 0;
@@ -213,43 +216,45 @@ public OnPlayerDeath(playerid, killerid, reason)
 			Update_Achievements(playerid);
 			Lang_SendText(killerid, "MESSAGE_ACHIEVEMENT_UNLOCKED", Lang_ReturnOnlyText(killerid, "COLLECTOR"));
 		}
+
 		SetPVarInt(playerid, "Spree", 0);
 		SetPVarInt(killerid, "Spree", GetPVarInt(killerid, "Spree") + 1);
+
 		switch(GetPVarInt(killerid, "Spree")){
 			case 2: {
 				new string[18+1];
 				format(string, sizeof(string), "~w~~h~Double kill!");
 				PlayerTextDrawSetString(killerid, Spree[killerid], string);
 				PlayerTextDrawShow(killerid, Spree[killerid]);
-				SetTimerEx("DeleteTD", 3300, false, "i", playerid);
+				SetTimerEx("DeleteTD", 3500, false, "i", playerid);
 			}
 			case 3: {
 				new string[18+1];
 				format(string, sizeof(string), "~y~~h~Tripe kill!");
 				PlayerTextDrawSetString(killerid, Spree[killerid], string);
 				PlayerTextDrawShow(killerid, Spree[killerid]);
-				SetTimerEx("DeleteTD", 3300, false, "i", playerid);
+				SetTimerEx("DeleteTD", 3500, false, "i", playerid);
 			}
 			case 4: {
 				new string[18+1];
 				format(string, sizeof(string), "~g~~h~Ultra kill!");
 				PlayerTextDrawSetString(killerid, Spree[killerid], string);
 				PlayerTextDrawShow(killerid, Spree[killerid]);
-				SetTimerEx("DeleteTD", 3300, false, "i", playerid);
+				SetTimerEx("DeleteTD", 3500, false, "i", playerid);
 			}
 			case 5: {
 				new string[18+1];
 				format(string, sizeof(string), "~r~~h~Rampage kill!");
 				PlayerTextDrawSetString(killerid, Spree[killerid], string);
 				PlayerTextDrawShow(killerid, Spree[killerid]);
-				SetTimerEx("DeleteTD", 3300, false, "i", playerid);
+				SetTimerEx("DeleteTD", 3500, false, "i", playerid);
 			}
 			case 10: {
 				new string[18+1];
 				format(string, sizeof(string), "~p~~h~Beast!");
 				PlayerTextDrawSetString(killerid, Spree[killerid], string);
 				PlayerTextDrawShow(killerid, Spree[killerid]);
-				SetTimerEx("DeleteTD", 3300, false, "i", playerid);
+				SetTimerEx("DeleteTD", 3500, false, "i", playerid);
 			}
 		}
 	}

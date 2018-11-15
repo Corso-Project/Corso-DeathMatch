@@ -84,8 +84,7 @@ DialogResponse:d_user_login(playerid, response, listitem, inputtext[]){
 	Lang_SendText(playerid, "HELLO_LOGIN",SERVER_NAME);
 	SetPlayerScore(playerid, P[playerid][p_kills]);
 
-	// if(P[playerid][p_access] >= 1)
-	Protection_SetPlayerParamInt(playerid, PROTECTION_ALL, PROTECTION_PLAYER_DISABLED, 1);
+	Protection_SetPlayerParamInt(playerid, PROTECTION_RAPIDFIRE, PROTECTION_PLAYER_DISABLED, 1);
 
 	if (P[playerid][p_shot_sound] == 1)
 		ToggleDamageSounds(true, true); // Taken, Given
