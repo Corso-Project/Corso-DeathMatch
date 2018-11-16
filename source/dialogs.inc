@@ -56,12 +56,20 @@ DialogResponse:d_user_login(playerid, response, listitem, inputtext[]){
 		if(strcmp(P[playerid][p_password], inputtext, false) != 0)
 			return Dialog_Show(playerid, Dialog: d_account_loggin_error);
 	}
+	
+	new ip_last[46];
+	GetPlayerIp(playerid, ip_last, sizeof(ip_last));
+
 	if(strcmp(P[playerid][p_password], inputtext, false) != 0)
 		return Dialog_Show(playerid, Dialog: d_account_loggin_error);
 	if(strlen(P[playerid][p_code]) != 0)
 		return Dialog_Show(playerid, Dialog: check_security_code);
 	else if(strlen(P[playerid][p_code_ip]) != 0 && strcmp(P[playerid][p_reg_ip], P[playerid][p_last_ip], false) != 0)
 		return Dialog_Show(playerid, Dialog: check_security_code_ip);
+	else if(strcmp(ip_last, P[playerid][p_last_ip], false) != 0){
+		Lang_SendText(playerid, "MESSAGE_PLAYER_SECURITY_IP_WARNING_1",  P[playerid][p_last_ip]);
+		Lang_SendText(playerid, "MESSAGE_PLAYER_SECURITY_IP_WARNING_2");
+	}
 
 	sscanf(P[playerid][p_settings], "p<,>iiii", P[playerid][p_show_admin_action], P[playerid][p_show_login], P[playerid][p_show_players_nickname], P[playerid][p_shot_sound]);
 	sscanf(P[playerid][p_achievements], "p<,>ii", P[playerid][p_paradise], P[playerid][p_collector]);
@@ -405,7 +413,7 @@ DialogResponse:d_player_ask(playerid, response, listitem, inputtext[]){
 	if(strlen(inputtext) <= 2)
 		return true;
 	Message_ToAdmin("MESSAGE_ADMIN_REPORT",P[playerid][p_name],playerid,inputtext);
-	Lang_SendText(playerid, "MESSAGE_PLAYER_ASK_SENDED",inputtext);
+	Lang_SendText(playerid, "MESSAGE_PLAYER_ASK_SENDED", inputtext);
 	return true;
 }
 DialogCreate:d_player_achievements(playerid){
