@@ -220,43 +220,17 @@ public OnPlayerDeath(playerid, killerid, reason)
 		SetPVarInt(playerid, "Spree", 0);
 		SetPVarInt(killerid, "Spree", GetPVarInt(killerid, "Spree") + 1);
 
-		switch(GetPVarInt(killerid, "Spree")){
-			case 2: {
-				new string[18+1];
-				format(string, sizeof(string), "~w~~h~Double kill!");
-				PlayerTextDrawSetString(killerid, Spree[killerid], string);
-				PlayerTextDrawShow(killerid, Spree[killerid]);
-				SetTimerEx("DeleteTD", 3500, false, "i", playerid);
-			}
-			case 3: {
-				new string[18+1];
-				format(string, sizeof(string), "~y~~h~Tripe kill!");
-				PlayerTextDrawSetString(killerid, Spree[killerid], string);
-				PlayerTextDrawShow(killerid, Spree[killerid]);
-				SetTimerEx("DeleteTD", 3500, false, "i", playerid);
-			}
-			case 4: {
-				new string[18+1];
-				format(string, sizeof(string), "~g~~h~Ultra kill!");
-				PlayerTextDrawSetString(killerid, Spree[killerid], string);
-				PlayerTextDrawShow(killerid, Spree[killerid]);
-				SetTimerEx("DeleteTD", 3500, false, "i", playerid);
-			}
-			case 5: {
-				new string[18+1];
-				format(string, sizeof(string), "~r~~h~Rampage kill!");
-				PlayerTextDrawSetString(killerid, Spree[killerid], string);
-				PlayerTextDrawShow(killerid, Spree[killerid]);
-				SetTimerEx("DeleteTD", 3500, false, "i", playerid);
-			}
-			case 10: {
-				new string[18+1];
-				format(string, sizeof(string), "~p~~h~Beast!");
-				PlayerTextDrawSetString(killerid, Spree[killerid], string);
-				PlayerTextDrawShow(killerid, Spree[killerid]);
-				SetTimerEx("DeleteTD", 3500, false, "i", playerid);
-			}
+		new string[18+1];
+		switch(GetPVarInt(killerid, "Spree")) {
+			case 2: format(string, sizeof(string), "~w~~h~Double kill!");
+			case 3: format(string, sizeof(string), "~y~~h~Tripe kill!");
+			case 4: format(string, sizeof(string), "~g~~h~Ultra kill!");
+			case 5: format(string, sizeof(string), "~r~~h~Rampage kill!");
+			case 10: format(string, sizeof(string), "~p~~h~Beast!");
 		}
+		PlayerTextDrawSetString(killerid, Spree[killerid], string);
+		PlayerTextDrawShow(killerid, Spree[killerid]);
+		SetTimerEx("DeleteTD", 3500, false, "i", killerid);
 	}
 	SendDeathMessage(killerid, playerid, reason);
 	return 1;
