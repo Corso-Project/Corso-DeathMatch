@@ -115,9 +115,9 @@ public OnPlayerDisconnect(playerid, reason)
 
 public OnPlayerSpawn(playerid)
 {
-	// PlayerTextDrawShow(playerid, Map_Stats[playerid]);
+	PlayerTextDrawShow(playerid, Map_Stats[playerid]);
 	new scriptString2[169];
-	format(scriptString2,sizeof(scriptString2),"~w~~h~K: ~r~~h~%d~n~~w~~h~D: ~r~~h~%d~n~~w~~h~Ratio: ~r~~h~%0.2f", P[playerid][p_kills], P[playerid][p_deaths], Float:P[playerid][p_kills]/Float:P[playerid][p_deaths]);
+	format(scriptString2,sizeof(scriptString2),"~n~~n~~n~~n~~w~~h~K: ~r~~h~%d~n~~w~~h~D: ~r~~h~%d~n~~w~~h~Ratio: ~r~~h~%0.2f", P[playerid][p_kills], P[playerid][p_deaths], P[playerid][p_kills] == 0 ? (0.00) : (Float:P[playerid][p_kills]/Float:P[playerid][p_deaths]));
 	PlayerTextDrawSetString(playerid, Map_Stats[playerid], scriptString2);
 
 	SetPlayerInterior(playerid, 0);
