@@ -233,6 +233,9 @@ public OnPlayerDeath(playerid, killerid, reason)
 		SetTimerEx("DeleteTD", 3500, false, "i", killerid);
 	}
 	SendDeathMessage(killerid, playerid, reason);
+
+	//format(string, sizeof(string), "Убил: "COL_WHITE"%s", P[killerid][p_name]);
+    SetPlayerChatBubble(playerid, Lang_ReturnOnlyText(playerid, "KILL_USER", P[killerid][p_name]), 0xff7518FF, 30.0, 6000);
 	return 1;
 }
 public OnPlayerText(playerid, text[])
@@ -255,7 +258,12 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 	if (issuerid != INVALID_PLAYER_ID) {
 		if (bodypart == 9) {
 			SetPlayerHealth(playerid, 0.0);
-			SendClientMessage(issuerid, -1, "H-E-A-D-S-H-O-T!");
+
+			new string[22+1];
+			format(string, sizeof(string), "~r~~h~H-E-A-D-S-H-O-T!");
+			PlayerTextDrawSetString(issuerid, Spree[issuerid], string);
+			PlayerTextDrawShow(issuerid, Spree[issuerid]);
+			SetTimerEx("DeleteTD", 3500, false, "i", issuerid);
 		}
 	}
 	return true;
