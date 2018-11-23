@@ -128,6 +128,7 @@ enum ProtectionPlayerInfo {
 #include "protection/weapon"
 #include "protection/money"
 #include "protection/killflood"
+#include "protection/weapondamage"
 #include "protection/rapidfire"
 #include "protection/badshot"
 #include "protection/pickuppick"
@@ -149,10 +150,6 @@ static
 	gParam[Protection][ProtectionParams],
 	gPlayerParam[MAX_PLAYERS][Protection][ProtectionPlayerParams],
 	gPlayerInfo[MAX_PLAYERS][ProtectionPlayerInfo];
-
-static const
-	NULL_gPlayerParam[ProtectionPlayerParams],
-	NULL_gPlayerInfo[ProtectionPlayerInfo];
 
 /*
 	OnGameModeInit
@@ -246,7 +243,7 @@ public OnGameModeInit()
 	Protection_SetParamInt(PROTECTION_CAMERA, PROTECTION_ENABLED, 1);
 	Protection_SetParamString(PROTECTION_CAMERA, PROTECTION_NAME, "Camera");
 	Protection_SetParamString(PROTECTION_CAMERA, PROTECTION_FUNCTION, "Protection_Camera");
-	Protection_SetParamFloat(PROTECTION_CAMERA, PROTECTION_MAX_DISTANCE, 200.0);
+	Protection_SetParamFloat(PROTECTION_CAMERA, PROTECTION_MAX_DISTANCE, 80.0);
 	Protection_SetParamInt(PROTECTION_CAMERA, PROTECTION_SPAWN_DELAY, 2000);
 
 	// cameramode
@@ -290,10 +287,18 @@ public OnGameModeInit()
 public OnPlayerConnect(playerid)
 {
 	// reset arrays data
-	for (new i = 0; i < sizeof(gParam); i++) {
-		gPlayerParam[playerid][Protection:i] = NULL_gPlayerParam;
+	new
+		i,
+		j;
+
+	for (i = 0; i < sizeof(gPlayerParam[]); i++) {
+		for (j = 0; j < sizeof(gPlayerParam[][]); j++) {
+			gPlayerParam[playerid][Protection:i][ProtectionPlayerParams:j] = 0;
+		}
 	}
-	gPlayerInfo[playerid] = NULL_gPlayerInfo;
+	for (i = 0; i < sizeof(gPlayerInfo[]); i++) {
+		gPlayerInfo[playerid][ProtectionPlayerInfo:i] = 0;
+	}
 
 	// store connect data
 	new
@@ -584,7 +589,7 @@ public _Protection_SysreqFix()
 	format(temp, sizeof(temp), "");
 }
 
-stock Protection_GivePlayerWarning(playerid, Protection:protection, fstring[], {Float, _}:...)
+stock Protection_GivePlayerWarning(playerid, Protection:protection, const fstring[], {Float, _}:...)
 {
 	static
 		warn_max,
@@ -615,8 +620,7 @@ stock Protection_GivePlayerWarning(playerid, Protection:protection, fstring[], {
 		#emit ADDR.pri fstring
 		#emit STOR.pri arg_start
 
-		for (arg_end = arg_start + (args - STATIC_ARGS * BYTES_PER_CELL); arg_end > arg_start; arg_end -= BYTES_PER_CELL)
-		{
+		for (arg_end = arg_start + (args - STATIC_ARGS * BYTES_PER_CELL); arg_end > arg_start; arg_end -= BYTES_PER_CELL) {
 			#emit LREF.pri arg_end
 			#emit PUSH.pri
 		}
@@ -631,8 +635,10 @@ stock Protection_GivePlayerWarning(playerid, Protection:protection, fstring[], {
 
 		CallRemoteFunction("OnPlayerGetProtectionWarning", "iiis", playerid, _:protection, warn_count >= warn_max, message);
 	} else {
-		if (fstring[0] == '\0') {
-			fstring[0] = '\1';
+		Protection_strcpy(message, fstring);
+
+		if (message[0] == '\0') {
+			message[0] = '\1';
 		}
 
 		CallRemoteFunction("OnPlayerGetProtectionWarning", "iiis", playerid, _:protection, warn_count >= warn_max, fstring);
@@ -685,7 +691,7 @@ stock Float:Protection_GetParamFloat(Protection:protection, ProtectionParams:par
 	Array params
 */
 
-stock Protection_SetParamArray(Protection:protection, ProtectionParams:param, values[], const size = sizeof(values))
+stock Protection_SetParamArray(Protection:protection, ProtectionParams:param, const values[], const size = sizeof(values))
 {
 	if (protection == PROTECTION_ALL) {
 		for (new i = 0; i < sizeof(gParam); i++) {
@@ -705,7 +711,7 @@ stock Protection_GetParamArray(Protection:protection, ProtectionParams:param, va
 	String params
 */
 
-stock Protection_SetParamString(Protection:protection, ProtectionParams:param, value[])
+stock Protection_SetParamString(Protection:protection, ProtectionParams:param, const value[])
 {
 	if (protection == PROTECTION_ALL) {
 		for (new i = 0; i < sizeof(gParam); i++) {
@@ -765,7 +771,7 @@ stock Float:Protection_GetPlayerParamFloat(playerid, Protection:protection, Prot
 	Player string params
 */
 
-stock Protection_SetPlayerParamString(playerid, Protection:protection, ProtectionPlayerParams:param, value[])
+stock Protection_SetPlayerParamString(playerid, Protection:protection, ProtectionPlayerParams:param, const value[])
 {
 	if (protection == PROTECTION_ALL) {
 		for (new i = 0; i < sizeof(gPlayerParam[]); i++) {
@@ -813,7 +819,7 @@ stock Float:Protection_GetPlayerInfoFloat(playerid, ProtectionPlayerInfo:param)
 	Player info string params
 */
 
-stock Protection_SetPlayerInfoString(playerid, ProtectionPlayerInfo:param, value[])
+stock Protection_SetPlayerInfoString(playerid, ProtectionPlayerInfo:param, const value[])
 {
 	Protection_strcpy(gPlayerInfo[playerid][param], value, PROTECTION_MAX_STRING);
 }
@@ -824,16 +830,11 @@ stock Protection_GetPlayerInfoString(playerid, ProtectionPlayerInfo:param, value
 }
 
 /*
-	Safe tick different
+	Tick different
 */
 
 stock Protection_GetTickDiff(newtick, oldtick)
 {
-	if (oldtick < 0 && newtick >= 0) {
-		return newtick - oldtick;
-	} else if (oldtick >= 0 && newtick < 0 || oldtick > newtick) {
-		return (cellmax - oldtick + 1) - (cellmin - newtick);
-	}
 	return newtick - oldtick;
 }
 
@@ -841,7 +842,7 @@ stock Protection_GetTickDiff(newtick, oldtick)
 	strcpy implementation
 */
 
-stock Protection_strcpy(result[], source[], const size = sizeof(result))
+stock Protection_strcpy(result[], const source[], const size = sizeof(result))
 {
 	result[0] = 0;
 	return strcat(result, source, size);
