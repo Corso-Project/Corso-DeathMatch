@@ -46,6 +46,7 @@ stock Get_PlayerVIP(playerid){
 	}
 	return vip;
 }
+
 stock Update_PlayerSettings(playerid) {
 	format(P[playerid][p_settings], 10, "%i,%i,%i,%i", P[playerid][p_show_admin_action], P[playerid][p_show_login], P[playerid][p_show_players_nickname], P[playerid][p_shot_sound]);
 	orm_update(P[playerid][_p_ormid]);
@@ -53,4 +54,15 @@ stock Update_PlayerSettings(playerid) {
 stock Update_Achievements(playerid) {
 	format(P[playerid][p_achievements], 10, "%i,%i", P[playerid][p_paradise], P[playerid][p_collector]);
 	orm_update(P[playerid][_p_ormid]);
+}
+
+stock Show_Stats(playerid, targetid) {
+	new Float:KD;
+	KD = Float:P[targetid][p_kills]/Float:P[targetid][p_deaths];
+	new string[10];
+	format(string,sizeof(string), "+ %f",KD);
+
+	Dialog_Open(playerid, Dialog:d_player_stats, DIALOG_STYLE_MSGBOX," ","PERSONAL_DIALOG_STATS", "EXIT","",
+	P[targetid][p_name], P[targetid][p_kills], P[targetid][p_deaths], P[targetid][p_cash],
+	P[targetid][p_kills] == 0 ? ("- 0") : (string));
 }

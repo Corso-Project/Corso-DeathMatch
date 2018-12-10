@@ -56,7 +56,7 @@ DialogResponse:d_user_login(playerid, response, listitem, inputtext[]){
 		if(strcmp(P[playerid][p_password], inputtext, false) != 0)
 			return Dialog_Show(playerid, Dialog: d_account_loggin_error);
 	}
-	
+
 	new ip_last[46];
 	GetPlayerIp(playerid, ip_last, sizeof(ip_last));
 
@@ -307,14 +307,7 @@ DialogResponse:d_player_menu(playerid, response, listitem, inputtext[]){
 	return true;
 }
 DialogCreate:d_player_stats(playerid){
-	new Float:KD;
-	KD = Float:P[playerid][p_kills]/Float:P[playerid][p_deaths];
-	new string[10];
-	format(string,sizeof(string), "+ %f",KD);
-
-	Dialog_Open(playerid, Dialog:d_player_stats, DIALOG_STYLE_MSGBOX," ","PERSONAL_DIALOG_STATS", "EXIT","",
-	P[playerid][p_name], P[playerid][p_kills], P[playerid][p_deaths], P[playerid][p_cash],
-	P[playerid][p_kills] == 0 ? ("- 0") : (string));
+	Show_Stats(playerid, playerid);
 }
 DialogResponse:d_player_stats(playerid, response, listitem, inputtext[]){
 	if(!response)
@@ -595,8 +588,27 @@ DialogResponse:check_security_code_ip(playerid, response, listitem, inputtext[])
 }
 
 DialogCreate:d_server_about(playerid){
-	Dialog_Open(playerid, Dialog:d_server_about, DIALOG_STYLE_MSGBOX, "ABOUT_VERSION_HEADER","ABOUT_VERSION","OK","",SERVER_NAME,GAMEMODE_VERSION);
+	Dialog_Open(playerid, Dialog:d_server_about, DIALOG_STYLE_MSGBOX, "ABOUT_VERSION_HEADER","ABOUT_VERSION","OK","", SERVER_NAME, GAMEMODE_VERSION);
 }
 DialogResponse:d_server_about(playerid, response, listitem, inputtext[]){
+	return true;
+}
+
+DialogCreate:d_player_clickplayer(playerid){
+	new header[MAX_PLAYER_NAME+16+1];
+	format(header,sizeof(header),"%s", Lang_ReturnOnlyText(playerid, "PERSONAL_DIALOG_MENU_CLICK_PLAYER_HEADER", P[GetPVarInt(playerid, "Click_On")][p_name]));
+
+	Dialog_Open(playerid, Dialog: d_player_clickplayer, DIALOG_STYLE_LIST, header,"PERSONAL_DIALOG_MENU_CLICK_PLAYER","ENTER", "EXIT");
+}
+DialogResponse:d_player_clickplayer(playerid, response, listitem, inputtext[]){
+	new user = GetPVarInt(playerid, "Click_On");
+	if(!response){
+		DeletePVar(playerid, "Click_On");
+	}
+	if(response) switch(listitem){
+		case 0:{
+			Show_Stats(playerid, user);
+		}
+	}
 	return true;
 }

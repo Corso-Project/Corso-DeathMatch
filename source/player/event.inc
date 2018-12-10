@@ -234,7 +234,6 @@ public OnPlayerDeath(playerid, killerid, reason)
 	}
 	SendDeathMessage(killerid, playerid, reason);
 
-	//format(string, sizeof(string), "Убил: "COL_WHITE"%s", P[killerid][p_name]);
     SetPlayerChatBubble(playerid, Lang_ReturnOnlyText(playerid, "KILL_USER", P[killerid][p_name]), 0xff7518FF, 30.0, 6000);
 	return 1;
 }
@@ -326,9 +325,12 @@ public OnPlayerClickPlayer(playerid, clickedplayerid, source)
 {
 	new message[50];
     new nickname[MAX_PLAYER_NAME];
+	SetPVarInt(playerid, "Click_On", clickedplayerid);
     GetPlayerName(clickedplayerid,nickname,sizeof(nickname));
 	format(message, sizeof(message), "You click on %s(ID:%d)", nickname, clickedplayerid);
 	SendClientMessage(playerid, 0xFFFFFFFF, message);
+
+	Dialog_Show(playerid, Dialog: d_player_clickplayer);
 	return 1;
 }
 public OnPlayerGetProtectionWarning(playerid, Protection:protection, bool:warn_reached, message[])
