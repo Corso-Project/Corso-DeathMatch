@@ -9,7 +9,7 @@ enum E_PLAYER_DATA
 	bool: _p_in_game,
 	ORM: _p_ormid,
 	_p_weapon_obj_[13],
-	//mysql synced
+	// mysql synced
 	p_uid,
 	p_name[MAX_PLAYER_NAME],
 	p_password[18],
@@ -58,6 +58,7 @@ new GZ[9][E_GANG_ZONES_DATA] = {
 	{"LV Pyramide", 2257.0, 1218.5, 2391.0, 1349.5, 0xFFFFFF50},
 	{"SF ship", -2524.0, 1525.5, -2296.0, 1564.5, 0xFFFFFF50}
 };
+
 new P[MAX_PLAYERS][E_PLAYER_DATA];
 
 new WeaponData[MAX_PLAYERS][13][2],
@@ -76,7 +77,8 @@ new DeathMatch_GZone[sizeof(GZ)],
 new g_MySQL_Host[46],
 	g_MySQL_User[46],
 	g_MySQL_Database[46],
-	g_MySQL_Password[46];
+	g_MySQL_Password[46],
+	MySQL: g_MySQL_DB;
 //settings.ini
 new g_Payment_First,
 	g_Payment_Killing;

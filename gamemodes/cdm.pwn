@@ -20,6 +20,7 @@
 #include <lib\weapon-config>
 #include <lib\mapfix>
 #include <lib\time_t>
+#include <lib\kick>
 
 #include "../include/gl_spawns.inc"
 

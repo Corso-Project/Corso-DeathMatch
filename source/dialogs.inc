@@ -8,7 +8,11 @@ DialogResponse:d_user_choose_language(playerid, response, listitem, inputtext[])
 	SetPVarInt(playerid, "P:Language", response);
 	P[playerid][p_language] = response;
 	if(P[playerid][_p_in_game] == false) return Dialog_Show(playerid, Dialog:d_user_register);
-	else return Dialog_Show(playerid, Dialog: d_player_settings);
+	else {
+		Dialog_Show(playerid, Dialog: d_player_settings);
+		orm_update(P[playerid][_p_ormid]);
+		return true;
+	}
 }
 
 DialogCreate:d_user_register(playerid){
@@ -612,3 +616,7 @@ DialogResponse:d_player_clickplayer(playerid, response, listitem, inputtext[]){
 	}
 	return true;
 }
+/*
+DialogCreate:d_account_ban(playerid){
+	Dialog_Open(playerid, Dialog:d_account_ban, DIALOG_STYLE_MSGBOX, "DIALOG_BAN_HEADER","DIALOG_BAN_TEXT","OK","", SERVER_NAME, GAMEMODE_VERSION);
+} */

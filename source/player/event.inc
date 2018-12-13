@@ -58,6 +58,7 @@ public OnPlayerConnect(playerid)
 
 	orm_setkey(ormid, "Name");
 	orm_select(ormid, "OnMySQL_SelectAccount", "d", playerid);
+
 	foreach(new i : Player){
 		if(P[i][_p_in_game] == false) return true;
 		if(i == playerid) continue;

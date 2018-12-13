@@ -4,7 +4,8 @@ public OnGameModeInit()
 	Load_Settings();
 	//Подключения к MySQL
 	mysql_log(ALL);
-	mysql_connect(g_MySQL_Host,g_MySQL_User,g_MySQL_Password,g_MySQL_Database);
+	g_MySQL_DB = mysql_connect(g_MySQL_Host,g_MySQL_User,g_MySQL_Password,g_MySQL_Database);
+	mysql_set_charset("cp1251");
 	if(mysql_errno() != 0) {
 	    print("\n[Error]: Can't connect to MySQL.\n");
 		SendRconCommand("exit");
