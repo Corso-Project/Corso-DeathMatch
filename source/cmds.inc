@@ -119,14 +119,14 @@ CMD:teleport(playerid, params[]){
 	if(P[playerid][p_access] < 1) return true;
 	new subcmd[7], subparams[64];
 	if (sscanf(params, "s[7]s[64]", subcmd, subparams)){
-		SendClientMessage(playerid, 0xB22222FF,"[Справка]: {FFFFFF}Используйте /t{FFCC66}[ele]{FFFFFF}p{FFCC66}[ort]{FFFFFF} to [ID игрока/Часть Ника]");
-		SendClientMessage(playerid, 0xB22222FF,"[Справка]: {FFFFFF}Используйте /t{FFCC66}[ele]{FFFFFF}p{FFCC66}[ort]{FFFFFF} here [ID игрока/Часть Ника]");
-		SendClientMessage(playerid, 0xB22222FF,"[Справка]: {FFFFFF}Используйте /t{FFCC66}[ele]{FFFFFF}p{FFCC66}[ort]{FFFFFF} coord <x> <y> <z> <интерьер> <мир>");
+		Lang_SendText(playerid, "ADMIN_CMDS_TP_HELP");
+		Lang_SendText(playerid, "ADMIN_CMDS_TP_HELP1");
+		Lang_SendText(playerid, "ADMIN_CMDS_TP_HELP2");
 		return 1;
 	}
 	new targetid = INVALID_PLAYER_ID;
 
-	if(sscanf(subparams, "u", targetid)) return SendClientMessage(playerid, 0xB22222FF,"[Справка]: {FFFFFF}Игрок не найден");
+	if(sscanf(subparams, "u", targetid)) return Lang_SendText(playerid, "ADMIN_CMDS_TP_CANT_FIND");
 	new Float:p_pos_x,            Float:t_pos_x,
 		Float:p_pos_y,            Float:t_pos_y,
 		Float:p_pos_z,            Float:t_pos_z,
@@ -146,18 +146,17 @@ CMD:teleport(playerid, params[]){
 		t_world = GetPlayerVirtualWorld(targetid);
 	}
 	if(strcmp(subcmd, "to", true) == 0) {
-		if (targetid == INVALID_PLAYER_ID || targetid == -1) return SendClientMessage(playerid, 0xB22222FF,"[Справка]: {FFFFFF}Игрок не найден");
+		if (targetid == INVALID_PLAYER_ID || targetid == -1) return Lang_SendText(playerid, "ADMIN_CMDS_TP_CANT_FIND");
 		TeleportPlayerToPos(playerid,t_pos_x + random(2) - random(4), t_pos_y + random(2) - random(4), t_pos_z,t_interior, t_world);\
-		//Message_ToAdmins(0xAFAFAFFF, "Just for test: %s",P[playerid][p_name]);
-		//Message_ToAdmins(0xAFAFAFFF, "Администратор %s[%d] телепортировался к %s[%d].", P[playerid][p_name], playerid, P[targetid][p_name], targetid);
+		Message_ToAdmin("MESSAGE_ADMIN_TP_TO", P[playerid][p_name], P[targetid][p_name]);
 	}
 	else if(strcmp(subcmd, "here", true) == 0) {
-		if (targetid == INVALID_PLAYER_ID) return SendClientMessage(playerid, 0xB22222FF,"[Справка]: {FFFFFF}Игрок не найден");
+		if (targetid == INVALID_PLAYER_ID) return Lang_SendText(playerid, "ADMIN_CMDS_TP_CANT_FIND");
 		TeleportPlayerToPos(targetid, p_pos_x + random(2) - random(4), p_pos_y + random(2) - random(4), p_pos_z, p_interior, p_world);
-		//Message_ToAdmins(0xAFAFAFFF, "Администратор %s[%d] телепортировал к себе %s[%d].",Name(playerid),playerid,Name(targetid),targetid);
+		Message_ToAdmin("MESSAGE_ADMIN_TP_HERE", P[playerid][p_name], P[targetid][p_name]);
 	}
 	else if(strcmp(subcmd, "coord", true) == 0) {
-		if(sscanf(subparams, "p<,>fffI(0)I(0)", t_pos_x, t_pos_y, t_pos_z, t_interior, t_world)) return SendClientMessage(playerid, 0xB22222FF, "[Справка]: {FFFFFF}/t{FFCC66}[ele]{FFFFFF}p{FFCC66}[ort]{FFFFFF} coord <x> <y> <z> <интерьер> <мир>");
+		if(sscanf(subparams, "p<,>fffI(0)I(0)", t_pos_x, t_pos_y, t_pos_z, t_interior, t_world)) return Lang_SendText(playerid, "ADMIN_CMDS_TP_HELP2");
 		TeleportPlayerToPos(playerid, t_pos_x, t_pos_y, t_pos_z, t_interior, t_world);
 	}
 	return true;
