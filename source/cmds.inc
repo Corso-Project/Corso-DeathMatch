@@ -317,3 +317,17 @@ CMD:offban(playerid, params[]){
 	}
 	return true;
 }
+CMD:baninfo(playerid, params[]){
+	if(P[playerid][p_access] < 1) return true;
+	new target[MAX_PLAYER_NAME];
+	if(sscanf(params, "s[24]", target)) return Lang_SendText(playerid, "ADMIN_CMDS_BANINFO_HELP");
+
+	if (IsNumeric(target)) {
+		strval(target);
+	}
+
+	new query[86+1];
+	mysql_format(g_MySQL_DB, query, sizeof(query), "SELECT * FROM `bans` WHERE `Name` = '%e' OR `ID` = '%i'", target, strval(target));
+	mysql_tquery(g_MySQL_DB, query, "OnMySQL_GetBanInfo", "isi", playerid, target, strval(target));
+	return true;
+}

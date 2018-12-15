@@ -29,10 +29,10 @@ public OnMySQL_CheckBans(playerid, reg_ip[46], last_ip[46])
 {
 	if(cache_num_rows() == 0)
 	{
-		printf("everything is ok");
 		Dialog_Show(playerid, Dialog:d_user_login);
 	} else {
-		new b_Name[MAX_PLAYER_NAME],
+		new b_ID,
+			b_Name[MAX_PLAYER_NAME],
 			b_Admin_Name[MAX_PLAYER_NAME],
 			b_Reg_IP[46],
 			b_Last_IP[46],
@@ -40,6 +40,7 @@ public OnMySQL_CheckBans(playerid, reg_ip[46], last_ip[46])
 			b_Unix_Time_End,
 			b_Reason[64];
 
+		cache_get_value_name_int(0, "ID", b_ID);
 		cache_get_value_name(0, "Name", b_Name);
 		cache_get_value_name(0, "Admin_Name", b_Admin_Name);
 		cache_get_value_name(0, "Reg_IP", b_Reg_IP);
@@ -62,7 +63,7 @@ public OnMySQL_CheckBans(playerid, reg_ip[46], last_ip[46])
 			Dialog_Show(playerid, Dialog:d_user_login);
 		} else {
 			Dialog_Message(playerid, "DIALOG_BAN_HEADER","DIALOG_BAN_TEXT","OK",
-				b_Name, b_Admin_Name,
+				b_Name, b_ID, b_Admin_Name,
 				start_hour, start_minute, start_second, start_day, start_month, start_year,
 				end_hour, end_minute, end_second, end_day, end_month, end_year,
 				b_Reason);
@@ -112,7 +113,6 @@ public OnMySQL_OffBan(playerid, account[MAX_PLAYER_NAME], time, reason[64], time
 		cache_get_value_name(0, "Last_IP", b_Last_IP);
 		cache_get_value_name_int(0, "Access", b_access);
 
-		printf("else -> %s - %s - %s", b_Name, b_Reg_IP, b_Last_IP);
 		if(P[playerid][p_access] < b_access) return Kick(playerid);
 	}
 	new b_id;
@@ -124,8 +124,7 @@ public OnMySQL_OffBan(playerid, account[MAX_PLAYER_NAME], time, reason[64], time
 	mysql_format(g_MySQL_DB, query, sizeof(query), "INSERT INTO `bans` (Name, Admin_Name, Reg_IP, Last_IP, Unix_Time_Start, Unix_Time_End, Reason) VALUES ('%e', '%e', '%s', '%s', '%i', '%i', '%s')",
 		account, P[playerid][p_name], b_Reg_IP, b_Last_IP, gettime(), time, reason);
 	mysql_tquery(g_MySQL_DB, query);
-	new string[30],
-		type;
+	new string[30];
 	if(strfind(time_string, "h", true) != -1)
 	{
 		format(string, sizeof(string), "%i %s",strval(time_string), Lang_ReturnOnlyText(playerid, "HOURS"));
@@ -137,5 +136,43 @@ public OnMySQL_OffBan(playerid, account[MAX_PLAYER_NAME], time, reason[64], time
 		format(string, sizeof(string), "%i %s",strval(time_string), Lang_ReturnOnlyText(playerid, "MONTHS"));
 	}
 	Message_ToAdmin("MESSAGE_ADMIN_OFFBAN", P[playerid][p_name], account, string, reason);
+	return true;
+}
+forward OnMySQL_GetBanInfo(playerid, name[MAX_PLAYER_NAME], id);
+public OnMySQL_GetBanInfo(playerid, name[MAX_PLAYER_NAME], id)
+{
+	if(cache_num_rows() == 0)
+		return Lang_SendText(playerid, "ADMIN_CMDS_BANINFO_CANT_FIND");
+	else {
+		new b_ID,
+			b_Name[MAX_PLAYER_NAME],
+			b_Admin_Name[MAX_PLAYER_NAME],
+			b_Reg_IP[46],
+			b_Last_IP[46],
+			b_Unix_Time_Start,
+			b_Unix_Time_End,
+			b_Reason[64];
+
+		cache_get_value_name_int(0, "ID", b_ID);
+		cache_get_value_name(0, "Name", b_Name);
+		cache_get_value_name(0, "Admin_Name", b_Admin_Name);
+		cache_get_value_name(0, "Reg_IP", b_Reg_IP);
+		cache_get_value_name(0, "Last_IP", b_Last_IP);
+		cache_get_value_name_int(0, "Unix_Time_Start", b_Unix_Time_Start);
+		cache_get_value_name_int(0, "Unix_Time_End", b_Unix_Time_End);
+		cache_get_value_name(0, "Reason", b_Reason);
+
+		new start_year, start_month, start_day, start_hour, start_minute, start_second;
+		gmtime(b_Unix_Time_Start, start_year, start_month, start_day, start_hour, start_minute, start_second);
+
+		new end_year, end_month, end_day, end_hour, end_minute, end_second;
+		gmtime(b_Unix_Time_End, end_year, end_month, end_day, end_hour, end_minute, end_second);
+
+		Dialog_Message(playerid, " ", "DIALOG_GETBAN_TEXT", "OK",
+			b_Name, b_ID, b_Admin_Name,
+			start_hour, start_minute, start_second, start_day, start_month, start_year,
+			end_hour, end_minute, end_second, end_day, end_month, end_year,
+			b_Reason);
+	}
 	return true;
 }

@@ -66,17 +66,3 @@ stock Show_Stats(playerid, targetid) {
 	P[targetid][p_name], P[targetid][p_kills], P[targetid][p_deaths], P[targetid][p_cash],
 	P[targetid][p_kills] == 0 ? ("- 0") : (string));
 }
-
-stock isdigit(symbol)
-{
-	return '0' <= symbol <= '9';
-}
-stock IsNumeric(const string[])
-{
-	for (new i = 0; string[i] != '\0'; i++) {
-		if (!isdigit(string[i])) {
-			return 0;
-		}
-	}
-	return 1;
-}
