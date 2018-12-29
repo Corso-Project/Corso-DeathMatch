@@ -181,6 +181,7 @@ DialogResponse:d_player_deathmatch(playerid, response, listitem, inputtext[]){
 		}
 		default:{
 			SendClientMessage(playerid, -1, "Soon.");
+			Dialog_Show(playerid, Dialog: d_player_deathmatch);
 			return true;
 		}
 	}

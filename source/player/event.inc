@@ -224,7 +224,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 		new string[18+1];
 		switch(GetPVarInt(killerid, "Spree")) {
 			case 2: format(string, sizeof(string), "~w~~h~Double kill!");
-			case 3: format(string, sizeof(string), "~y~~h~Tripe kill!");
+			case 3: format(string, sizeof(string), "~y~~h~Triple kill!");
 			case 4: format(string, sizeof(string), "~g~~h~Ultra kill!");
 			case 5: format(string, sizeof(string), "~r~~h~Rampage kill!");
 			case 10: format(string, sizeof(string), "~p~~h~Beast!");
@@ -324,13 +324,7 @@ public OnPlayerEnterDynamicArea(playerid, areaid){
 }
 public OnPlayerClickPlayer(playerid, clickedplayerid, source)
 {
-	new message[50];
-    new nickname[MAX_PLAYER_NAME];
 	SetPVarInt(playerid, "Click_On", clickedplayerid);
-    GetPlayerName(clickedplayerid,nickname,sizeof(nickname));
-	format(message, sizeof(message), "You click on %s(ID:%d)", nickname, clickedplayerid);
-	SendClientMessage(playerid, 0xFFFFFFFF, message);
-
 	Dialog_Show(playerid, Dialog: d_player_clickplayer);
 	return 1;
 }
